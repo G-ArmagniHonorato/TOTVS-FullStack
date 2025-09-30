@@ -1,0 +1,83 @@
+<div class="container">
+  <div *ngIf="message" class="alert alert-{{messageType}} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" (click)="message = ''"></button>
+  </div>
+
+  <app-product-form 
+    [product]="product" 
+    [isEditing]="isEditing" 
+    (save)="saveProduct($event)" 
+    (cancel)="cancelEdit()">
+  </app-product-form>
+
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h5>Lista de Produtos</h5>
+      <button class="btn btn-primary btn-sm" (click)="loadProducts()">Atualizar</button>
+    </div>
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border"></div>
+        <p>Carregando...</p>
+      </div>
+      
+      <div *ngIf="!loading && products.length === 0" class="text-center text-muted">
+        <p>Nenhum produto cadastrado</p>
+      </div>
+      
+      <div *ngIf="!loading && products.length > 0" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Imagem</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>SKU</th>
+              <th>Preço</th>
+              <th>Ultima Alteração</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products">
+              <td><strong>{{product.id}}</strong></td>
+              <td><img *ngIf="product.image" [src]="product.image" alt="Imagem" width="50" height="50"></td>
+              <td class="textlenght_12">{{product.name}}</td>
+              <td class="textlenght_12">{{product.description}}</td>
+              <td class="textlenght_12">{{product.sku}}</td>
+              <td class="textlenght_12">{{product.price}}</td>
+              <td>
+              {{ product.modTs ? (product.modTs | date:'dd/MM/yyyy HH:mm') : '' }}
+              </td>
+              <td>
+                <button class="btn btn-warning btn-sm me-2" (click)="editProduct(product)">Editar</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteProduct(product)">Excluir</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade" *ngIf="showDeleteModal"></div>
+<div class="modal d-block" *ngIf="showDeleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+        <button type="button" class="btn-close" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja excluir "<strong>{{productToDelete?.name}}</strong>"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
