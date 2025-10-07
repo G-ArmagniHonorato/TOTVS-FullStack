@@ -22,7 +22,6 @@ namespace Infra.Repositories
         public async Task<List<Product>> GetAll()
         {
             return await _context.Products
-                .Where(p => !p.Excluido)
                 .ToListAsync();
         }
 

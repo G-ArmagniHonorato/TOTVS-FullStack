@@ -27,8 +27,6 @@ namespace Infra.Data
                 entity.Property(e => e.CreateTs);
                 entity.Property(e => e.ModTs);
             });
-
-            modelBuilder.Entity<Product>().HasQueryFilter(p => !p.Excluido);
         }
     }
 
